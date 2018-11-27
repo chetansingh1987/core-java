@@ -1,4 +1,4 @@
-
+package core;
 public class StringBehavior
 {
 	public static void main(String[] args) {

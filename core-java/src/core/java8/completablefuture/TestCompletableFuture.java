@@ -1,4 +1,4 @@
-package com.cs.core.completablefuture;
+package core.java8.completablefuture;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
