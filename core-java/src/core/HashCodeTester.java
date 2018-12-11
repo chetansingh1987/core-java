@@ -5,8 +5,8 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-public class StringBehavior
-{
+public class HashCodeTester {
+
 	@Test
 	public void test1() {
 		String a = new String("ABC");
@@ -16,10 +16,4 @@ public class StringBehavior
 		assertFalse(a==b);
 	}
 	
-	@Test
-	public void test2() {
-		String a = new String("ABC").intern();
-		String b = new String("ABC").intern();
-		assertTrue(a==b);
-	}
 }
