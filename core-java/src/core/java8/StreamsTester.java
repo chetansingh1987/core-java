@@ -4,6 +4,7 @@ import static java.util.stream.Collectors.*;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.summingInt;
 import static java.util.stream.Collectors.toSet;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
@@ -30,15 +31,19 @@ public class StreamsTester {
 		listStu.stream().map(student->student.getName()).filter(name->name.startsWith("A")).collect(Collectors.toList()).forEach(System.out::println);
 	}
 	
+	@Test
 	public void test3() {
 		Stream<Integer> numbers = Stream.of(1,2,3,4,5);
-		Optional<Integer> intOptional = numbers.reduce((i,j) -> {return i*j;});
+		Optional<Integer> intOptional = numbers.reduce((i,j) -> {
+			System.out.println(i+" "+j);
+			return i*j;});
 		if(intOptional.isPresent()) System.out.println("Multiplication = "+intOptional.get()); //120
 	}
 	
+	@Test
 	public void test4() {
 		Stream<Integer> numbers = Stream.of(1,2,3,4,5);
-		System.out.println(numbers.count());
+		assertTrue(numbers.count()==5);
 	}
 	
 	public void test5() {
@@ -56,17 +61,14 @@ public class StreamsTester {
 	public void test6() {
 		List<BlogPost> posts = getSample();
 		Map<BlogPostType, List<BlogPost>> postsPerType = posts.stream().collect(Collectors.groupingBy(p->p.getType()));
-		postsPerType.forEach((k,v)->{
-			System.out.println(k);
-			v.stream().forEach(b->System.out.println(b.getTitle()));
-		});
+		System.out.println(Arrays.toString(postsPerType.entrySet().toArray()));
 	}
 	
 	
 	@Test
+	//Lets Create a Map with Tuple as Key and BlogPost as value
 	public void test7() {
 		List<BlogPost> posts = getSample();
-		//Lets Create a Map with Tuple as Key and BlogPost as value
 		Map<Tuple,List<BlogPost>> map = posts.stream().collect(Collectors.groupingBy(post->new Tuple(post.getType(),post.getAuthor())));
 		System.out.println(Arrays.toString(map.entrySet().toArray()));
 	}
@@ -79,8 +81,9 @@ public class StreamsTester {
 	}
 	
 	
-	//Providing a Secondary Group By Collector
+	
 	@Test
+	//Providing a Secondary Group By Collector
 	public void test9() {
 		List<BlogPost> posts = getSample();
 		Map<BlogPostType, Map< String ,List<BlogPost> > > map = posts.stream().collect(groupingBy(BlogPost::getType, 
