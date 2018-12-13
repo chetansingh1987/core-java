@@ -1,10 +1,11 @@
 package core.java8;
 
-import static java.util.stream.Collectors.*;
+import static java.util.stream.Collectors.averagingInt;
 import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.maxBy;
+import static java.util.stream.Collectors.summarizingInt;
 import static java.util.stream.Collectors.summingInt;
 import static java.util.stream.Collectors.toSet;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
@@ -16,11 +17,21 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
 import org.junit.Test;
 
 
 public class StreamsTester {
 	
+	
+	@Test
+	public void test1() {
+		Student s1 = new Student("Anurag");
+		Student s2 = new Student("Anupam");
+		Student s3 = new Student("Chetan");
+		List<Student> listStu = Arrays.asList(s1,s2,s3);
+		System.out.println(listStu.parallelStream().findAny());
+	}
 	
 	public void test2() {
 		Student s1 = new Student("Anurag");
