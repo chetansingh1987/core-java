@@ -1,55 +1,25 @@
 package core.java8;
 
+import static java.util.stream.Collectors.*;
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.summingInt;
+import static java.util.stream.Collectors.toSet;
+import static org.junit.Assert.assertTrue;
+
 import java.util.Arrays;
+import java.util.Comparator;
+import java.util.IntSummaryStatistics;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
 import org.junit.Test;
 
 
-enum BlogPostType {
-    NEWS,
-    REVIEW,
-    GUIDE
-}
-
-class Student {
-	String name ;
-	public Student(String name) {
-		super();
-		this.name = name;
-	}
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	@Override
-	public String toString() {
-		return "Student [name=" + name + "]";
-	}
-}
-
 public class StreamsTester {
 	
-	
-	@Test
-	public void test1() {
-		List<BlogPost> posts = getSample();
-		Map<BlogPostType, List<BlogPost>> postsPerType = posts.stream().collect(Collectors.groupingBy(BlogPost::getType));
-		postsPerType.forEach((k,v)->{
-			System.out.println(k);
-			v.stream().forEach(b->System.out.println(b.getTitle()));
-		}
-		);
-	}
-	
-	
-
 	
 	public void test2() {
 		Student s1 = new Student("Anurag");
@@ -82,20 +52,133 @@ public class StreamsTester {
 		System.out.println(numbers5.allMatch(i->i<10));
 	}
 	
+	@Test
+	public void test6() {
+		List<BlogPost> posts = getSample();
+		Map<BlogPostType, List<BlogPost>> postsPerType = posts.stream().collect(Collectors.groupingBy(p->p.getType()));
+		postsPerType.forEach((k,v)->{
+			System.out.println(k);
+			v.stream().forEach(b->System.out.println(b.getTitle()));
+		});
+	}
+	
+	
+	@Test
+	public void test7() {
+		List<BlogPost> posts = getSample();
+		//Lets Create a Map with Tuple as Key and BlogPost as value
+		Map<Tuple,List<BlogPost>> map = posts.stream().collect(Collectors.groupingBy(post->new Tuple(post.getType(),post.getAuthor())));
+		System.out.println(Arrays.toString(map.entrySet().toArray()));
+	}
+	
+	@Test
+	public void test8() {
+		List<BlogPost> posts = getSample();
+		Map<BlogPostType, Set<BlogPost>> postsPerType = posts.stream().collect(groupingBy(p->p.getType(),toSet()));
+		System.out.println(Arrays.toString(postsPerType.entrySet().toArray()));
+	}
+	
+	
+	//Providing a Secondary Group By Collector
+	@Test
+	public void test9() {
+		List<BlogPost> posts = getSample();
+		Map<BlogPostType, Map< String ,List<BlogPost> > > map = posts.stream().collect(groupingBy(BlogPost::getType, 
+																			    	   groupingBy(BlogPost::getAuthor)));
+		map.forEach((k,v)->{
+			System.out.println(k);
+			System.out.println(Arrays.toString(v.entrySet().toArray()));
+		});
+	}
+	
+	//Getting the Average from Grouped Results
+	@Test
+	public void test10() {
+		List<BlogPost> posts = getSample();
+		Map<BlogPostType, Double >  map = posts.stream().collect(groupingBy(BlogPost::getType,  averagingInt(BlogPost::getLikes)));
+		System.out.println(Arrays.toString(map.entrySet().toArray()));
+	}
+	
+	//Getting the Sum from Grouped Results
+	@Test
+	public void test11() {
+		List<BlogPost> posts = getSample();
+		Map<BlogPostType, Integer >  map = posts.stream().collect(groupingBy(BlogPost::getType,  summingInt(BlogPost::getLikes)));
+		System.out.println(Arrays.toString(map.entrySet().toArray()));
+	}
+	
+	//Getting max Likes
+	@Test
+	public void test12() {
+		List<BlogPost> posts = getSample();
+		Map<BlogPostType, Optional<BlogPost> >  map = posts.stream().collect(groupingBy(BlogPost::getType,  maxBy(Comparator.comparingInt(BlogPost::getLikes) )));
+		System.out.println(Arrays.toString(map.entrySet().toArray()));
+	}
+	
+	//Getting the Sum from Grouped Results
+	@Test
+	public void test13() {
+		List<BlogPost> posts = getSample();
+		Map<BlogPostType, IntSummaryStatistics >  map = posts.stream().collect(groupingBy(BlogPost::getType,  summarizingInt(BlogPost::getLikes)));
+		System.out.println(Arrays.toString(map.entrySet().toArray()));
+	}
+	
 	
 	public List<BlogPost> getSample() {
-		BlogPost b1 = new BlogPost("Title A","Author A",BlogPostType.REVIEW,1);
-		BlogPost b2 = new BlogPost("Title D","Author D",BlogPostType.REVIEW,1);
-		BlogPost b3 = new BlogPost("Title B","Author B",BlogPostType.NEWS,1);
-		BlogPost b4 = new BlogPost("Title F","Author B",BlogPostType.NEWS,1);
-		BlogPost b5 = new BlogPost("Title C","Author C",BlogPostType.NEWS,1);
-		BlogPost b6 = new BlogPost("Title E","Author E",BlogPostType.GUIDE,1);
+		BlogPost b1 = new BlogPost("Title A","Author A",BlogPostType.REVIEW,3);//avg like 4
+		BlogPost b2 = new BlogPost("Title D","Author D",BlogPostType.REVIEW,5);
+		BlogPost b3 = new BlogPost("Title B","Author B",BlogPostType.NEWS,6);//avg like 4
+		BlogPost b4 = new BlogPost("Title F","Author B",BlogPostType.NEWS,3);
+		BlogPost b5 = new BlogPost("Title C","Author C",BlogPostType.NEWS,3);
+		BlogPost b6 = new BlogPost("Title E","Author E",BlogPostType.GUIDE,5);//avg like 5
 		return Arrays.asList(b1,b2,b3,b4,b5,b6);		
 	}
 
 }
 
+enum  BlogPostType {NEWS,REVIEW,GUIDE}
 
+class Tuple { 
+	BlogPostType type; 
+	String author;
+	public Tuple(BlogPostType type, String author) {
+		super();
+		this.type = type;
+		this.author = author;
+	}
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((author == null) ? 0 : author.hashCode());
+		result = prime * result + ((type == null) ? 0 : type.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Tuple other = (Tuple) obj;
+		if (author == null) {
+			if (other.author != null)
+				return false;
+		} else if (!author.equals(other.author))
+			return false;
+		if (type != other.type)
+			return false;
+		return true;
+	}
+	@Override
+	public String toString() {
+		return "Tuple [type=" + type + ", author=" + author + "]";
+	}
+	
+	
+}
 class BlogPost {
     String title;
     String author;
@@ -132,5 +215,64 @@ class BlogPost {
 	public void setLikes(int likes) {
 		this.likes = likes;
 	}
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((author == null) ? 0 : author.hashCode());
+		result = prime * result + likes;
+		result = prime * result + ((title == null) ? 0 : title.hashCode());
+		result = prime * result + ((type == null) ? 0 : type.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		BlogPost other = (BlogPost) obj;
+		if (author == null) {
+			if (other.author != null)
+				return false;
+		} else if (!author.equals(other.author))
+			return false;
+		if (likes != other.likes)
+			return false;
+		if (title == null) {
+			if (other.title != null)
+				return false;
+		} else if (!title.equals(other.title))
+			return false;
+		if (type != other.type)
+			return false;
+		return true;
+	}
+	@Override
+	public String toString() {
+		return "BlogPost [title=" + title + "]";
+	}
+	
+	
 }
 
+
+class Student {
+	String name ;
+	public Student(String name) {
+		super();
+		this.name = name;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	@Override
+	public String toString() {
+		return "Student [name=" + name + "]";
+	}
+}
