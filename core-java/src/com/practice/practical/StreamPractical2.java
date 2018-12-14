@@ -2,6 +2,7 @@ package com.practice.practical;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.io.UncheckedIOException;
 import java.io.Writer;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -9,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -20,12 +22,24 @@ public class StreamPractical2 {
 	       File file = new File("export/" + fileName);
 	       try (Writer writer = new FileWriter(file)) {
 	              writer.write("OrderID;Date\n");
-	              repo.findByActiveTrue().stream().map(o -> o.getId() + ";" + o.getCreationDate()).forEach(writer::write);
+	              Consumer<String> co = Uncheked.consumer(writer::write);//  co = writer.write(String)
+	              repo.findByActiveTrue().stream().map(o -> o.getId() + ";" + o.getCreationDate()).forEach(co);
 	              return file;
 	       } catch (Exception e) {
 	              throw e;
 	       }
 	}
+}
+
+@FunctionalInterface
+interface ExcpetionInterface<T> {
+   void  t(T x) throws Exception;
+}
+class Uncheked {
+	public static <T> Consumer<T> consumer( ExcpetionInterface<T> exInterface) throws RuntimeException {
+		return s->{ try {exInterface.t(s);}catch(Exception e) {}};
+	}
+	
 }
 class Repository {
 	public List<Order> getOrderList(){
