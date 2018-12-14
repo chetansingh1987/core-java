@@ -2,6 +2,7 @@ package com.practice.practical;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.io.Writer;
 import java.text.DateFormat;
@@ -16,18 +17,41 @@ import java.util.stream.Collectors;
 
 public class StreamPractical2 {
 	
+	public void test() throws Exception {
+		new OrderExporter().exportFile("testing");
+	}
+	
+}
+
+abstract class FileExporter {
 	
 	public File exportFile(String fileName) throws Exception {
-		   Repository repo = new Repository();
+		   
 	       File file = new File("export/" + fileName);
 	       try (Writer writer = new FileWriter(file)) {
-	              writer.write("OrderID;Date\n");
-	              Consumer<String> co = Uncheked.consumer(writer::write);//  co = writer.write(String)
-	              repo.findByActiveTrue().stream().map(o -> o.getId() + ";" + o.getCreationDate()).forEach(co);
+	              writeContent(writer);
 	              return file;
 	       } catch (Exception e) {
 	              throw e;
 	       }
+	}
+	abstract protected void writeContent(Writer writer) throws IOException ;
+}
+
+//Cons : We are forcing subcalsses to have a method by name writeContent. It would be better if we had a method as writeOrder etc
+class OrderExporter extends FileExporter {
+	public void writeContent(Writer writer) throws IOException {
+		Repository repo = new Repository();
+		writer.write("OrderID;Date\n");
+		  Consumer<String> co = Uncheked.consumer(writer::write);//  co = writer.write(String)
+		  repo.findByActiveTrue().stream().map(o -> o.getId() + ";" + o.getCreationDate()).forEach(co);
+	}
+}
+//Cons : We are forcing subcalsses to have a method by name writeContent. It would be better if we had a method as writeUser etc
+class UserExporter extends FileExporter {
+	protected void writeContent(Writer writer) throws IOException {
+		Repository repo = new Repository();
+		//Write USER CSV's
 	}
 }
 
