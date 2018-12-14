@@ -18,38 +18,40 @@ import java.util.stream.Collectors;
 public class StreamPractical2 {
 	
 	public void test() throws Exception {
-		new OrderExporter().exportFile("testing");
+		OrderExporter exporter = new OrderExporter() ;
+		exporter.exportFile("testing",Uncheked.consumer(exporter::writeOrders));
 	}
 	
 }
 
-abstract class FileExporter {
+class FileExporter {
 	
-	public File exportFile(String fileName) throws Exception {
+	public File exportFile(String fileName,Consumer<Writer> contentWriter) throws Exception {
 		   
 	       File file = new File("export/" + fileName);
 	       try (Writer writer = new FileWriter(file)) {
-	              writeContent(writer);
-	              return file;
+	    	   contentWriter.accept(writer);
+	           return file;
 	       } catch (Exception e) {
 	              throw e;
 	       }
 	}
-	abstract protected void writeContent(Writer writer) throws IOException ;
 }
 
-//Cons : We are forcing subcalsses to have a method by name writeContent. It would be better if we had a method as writeOrder etc
-class OrderExporter extends FileExporter {
-	public void writeContent(Writer writer) throws IOException {
+class OrderExporter  {
+	
+	public void writeOrders(Writer writer) throws IOException {
 		Repository repo = new Repository();
 		writer.write("OrderID;Date\n");
 		  Consumer<String> co = Uncheked.consumer(writer::write);//  co = writer.write(String)
 		  repo.findByActiveTrue().stream().map(o -> o.getId() + ";" + o.getCreationDate()).forEach(co);
 	}
 }
-//Cons : We are forcing subcalsses to have a method by name writeContent. It would be better if we had a method as writeUser etc
-class UserExporter extends FileExporter {
-	protected void writeContent(Writer writer) throws IOException {
+
+
+
+class UserExporter {
+	protected void writeUsers(Writer writer) throws IOException {
 		Repository repo = new Repository();
 		//Write USER CSV's
 	}
