@@ -10,7 +10,7 @@ public class OOPSTesting {
 		method(x);
 	}
 	
-	public void method(B b) {
+	public void method(A b) {
 		b.test("ABC");
 	}
 }
