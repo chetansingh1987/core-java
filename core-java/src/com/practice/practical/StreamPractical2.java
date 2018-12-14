@@ -18,8 +18,9 @@ import java.util.stream.Collectors;
 public class StreamPractical2 {
 	
 	public void test() throws Exception {
-		OrderExporter exporter = new OrderExporter() ;
-		exporter.exportFile("testing",Uncheked.consumer(exporter::writeOrders));
+		FileExporter exporter = new FileExporter() ;
+		OrderWriter orderWriter = new OrderWriter();
+		exporter.exportFile("testing",Uncheked.consumer(orderWriter::writeOrders));
 	}
 	
 }
@@ -38,7 +39,7 @@ class FileExporter {
 	}
 }
 
-class OrderExporter  {
+class OrderWriter  {
 	
 	public void writeOrders(Writer writer) throws IOException {
 		Repository repo = new Repository();
@@ -50,7 +51,7 @@ class OrderExporter  {
 
 
 
-class UserExporter {
+class UserWriter {
 	protected void writeUsers(Writer writer) throws IOException {
 		Repository repo = new Repository();
 		//Write USER CSV's
