@@ -15,6 +15,21 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+
+/**
+ * Conclusion
+In short:
+
+Always extract complex lambdas into named functions that you reference using ::. You should NEVER write -> {.
+Avoid excessive call chaining — break them up using explanatory methods and variables, especially if the return type varies across these calls.
+Whenever null annoys you, think about using the Optional. Twist your mind — you will have to apply functions to the magic box.
+Realize when the variable thing is a function, and you work with that explicitly, pass a function to another function.
+Loan Pattern means to have the function you give as the parameter that you use for a resource managed by the 'host' function. This leads to conceptually lighter, loosely coupled, and easy to test design.
+Sometimes, you might want to have some arbitrary code to execute around another function. If that is the case, pass that code to the function as a parameter.
+You can hook type-specific logic to your enums using method references to make sure each enum value is associated with a corresponding bit of logic.
+ * @author chetan.singh1
+ *
+ */
 public class StreamPractical2 {
 	
 	public void test() throws Exception {
