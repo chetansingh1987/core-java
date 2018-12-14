@@ -17,7 +17,9 @@ public class StreamPractical {
 	}
 
 	public String getDiscountLine(Customer customer) {
-		return customer.getMemberCard().map(card->getDiscountPercentage(card)).map(d->"Discount%: " +d.get()).orElse("NA");
+		return customer.getMemberCard().map(card->getDiscountPercentage(card))
+									   .map(d->"Discount%: " +d)
+									   .orElse("NA");
 		//return getDiscountPercentage(customer.getMemberCard()).map(d->"Discount%: " + d).orElse("NA"); //StreamPractical.map.ma"Discount%: " + getDiscountPercentage(customer.getMemberCard());
 	}
 	
