@@ -17,18 +17,17 @@ public class StreamPractical {
 	}
 
 	public String getDiscountLine(Customer customer) {
-		return getDiscountPercentage(customer.getMemberCard()).map(d->"Discount%: " + d).orElse("NA"); //StreamPractical.map.ma"Discount%: " + getDiscountPercentage(customer.getMemberCard());
+		return customer.getMemberCard().map(card->getDiscountPercentage(card)).map(d->"Discount%: " +d.get()).orElse("NA");
+		//return getDiscountPercentage(customer.getMemberCard()).map(d->"Discount%: " + d).orElse("NA"); //StreamPractical.map.ma"Discount%: " + getDiscountPercentage(customer.getMemberCard());
 	}
 	
-	public Optional<Integer> getDiscountPercentage(Optional<MemberCard> card) {
-		if(card.isPresent()) {
-			if (card.get().getFidelityPoints() >= 100) {
+	public Optional<Integer> getDiscountPercentage(MemberCard card) {
+			if (card.getFidelityPoints() >= 100) {
 				return of(5);
 			}
-			if (card.get().getFidelityPoints() >= 50) {
+			if (card.getFidelityPoints() >= 50) {
 				return of(3);
 			}
-		}
 		return Optional.empty();
 	}
 
