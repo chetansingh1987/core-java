@@ -1,8 +1,16 @@
 package core;
 
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Test;
 
 public class OOPSTesting {
+	
+	@Test
+	public void test2() {
+		BI x = new BI();
+		assertEquals(1,x.meth(2));
+	}
 
 	@Test
 	public void test() {
@@ -12,6 +20,14 @@ public class OOPSTesting {
 	
 	public void method(A b) {
 		b.test("ABC");
+	}
+}
+class BI {
+	public int meth(Object o) {
+		return 0;
+	}
+	public int meth(int o) {
+		return 1;
 	}
 }
 class AI implements A {
