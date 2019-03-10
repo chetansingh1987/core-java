@@ -57,6 +57,7 @@ public class StreamsTester {
 		assertTrue(numbers.count()==5);
 	}
 	
+	@Test
 	public void test5() {
 		Stream<Integer> numbers3 = Stream.of(1,2,3,4,5);
 		System.out.println(numbers3.anyMatch(i->i==4));
