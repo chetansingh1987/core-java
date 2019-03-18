@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import org.junit.Test;
@@ -147,6 +148,17 @@ public class StreamsTester {
 		BlogPost b5 = new BlogPost("Title C","Author C",BlogPostType.NEWS,3);
 		BlogPost b6 = new BlogPost("Title E","Author E",BlogPostType.GUIDE,5);//avg like 5
 		return Arrays.asList(b1,b2,b3,b4,b5,b6);		
+	}
+	
+	
+	/**
+	 * Stream optimiuzation is done so we dont iterate 100 numbers but only 
+	 * five because of intermdediate operationlimit
+	 */
+	
+	@Test
+	public void test14() {
+		IntStream.range(0, 100).peek(i->System.out.println("Peeked "+i)).limit(5).forEach(System.out::print);
 	}
 
 }
@@ -291,3 +303,4 @@ class Student {
 		return "Student [name=" + name + "]";
 	}
 }
+
