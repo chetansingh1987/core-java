@@ -20,16 +20,21 @@ public class AccumulatorTest {
 		int maxNumber=3;
 		CountDownLatch cdL = new CountDownLatch(maxNumber);
 		ExecutorService fixedPool = Executors.newFixedThreadPool(nT);
-	    LongAccumulator adder  =  new LongAccumulator((x,y)->x+y,0l);
-		//LongAdder adder = new LongAdder();
-	    Runnable runable = ()->{adder.accumulate(1);cdL.countDown();};
+	    //LongAccumulator adder  =  new LongAccumulator((x,y)->x+y,0l);
+		LongAdder adder = new LongAdder();
+	    Runnable runable = ()->{
+	    						 System.out.println(this.hashCode());
+	    						 adder.increment();
+	    	                     //adder.accumulate(1);
+	    	                     cdL.countDown();};
 	    IntStream.range(0, maxNumber).forEach(i->{
 	    	fixedPool.submit(runable);
 	    });
 	    try {
 			cdL.await();
 			fixedPool.shutdown();
-			assertEquals(maxNumber,adder.get());
+			assertEquals(maxNumber,adder.sum());
+			//assertEquals(maxNumber,adder.get());
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
