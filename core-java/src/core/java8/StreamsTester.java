@@ -143,6 +143,13 @@ public class StreamsTester {
 		System.out.println(Arrays.toString(map.entrySet().toArray()));
 	}
 	
+	//Getting the Sum from Grouped Results
+	@Test
+	public void test15() {
+		List<Integer> listNum = Arrays.asList(1,2,3);
+		IntSummaryStatistics intSummary = listNum.stream().mapToInt(x->x).summaryStatistics();
+		intSummary.getAverage();
+	}
 	
 	public List<BlogPost> getSample() {
 		BlogPost b1 = new BlogPost("Title A","Author A",BlogPostType.REVIEW,3);//avg like 4
