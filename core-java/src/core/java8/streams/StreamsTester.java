@@ -24,6 +24,10 @@ import org.junit.Test;
 
 public class StreamsTester {
 	
+	@Test
+	public void test22() {
+		IntStream.of(10).forEach(x->System.out.println(x));
+	}
 	
 	@Test
 	public void test1() {
