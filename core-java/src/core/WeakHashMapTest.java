@@ -1,11 +1,11 @@
 package core;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.Test;
 
 import java.util.HashMap;
 import java.util.WeakHashMap;
 
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 public class WeakHashMapTest {
 

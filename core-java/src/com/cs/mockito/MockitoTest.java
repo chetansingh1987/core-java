@@ -1,5 +1,6 @@
 package com.cs.mockito;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+//import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.times;
 
 import org.junit.Assert;
@@ -64,7 +65,7 @@ public class MockitoTest {
 		      //add the behavior to throw exception
 		      Mockito.doThrow(new Exception("Add operation not implemented")) .when(bMock).method4();
 		      //test the add functionality
-		      Assert.assertEquals("Same",bMock.method4(),1); 
+		      assertEquals("Same",bMock.method4(),1);
 	}
 	
 	
