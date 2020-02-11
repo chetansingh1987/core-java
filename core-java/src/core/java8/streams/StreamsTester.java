@@ -23,7 +23,15 @@ import org.junit.Test;
 
 
 public class StreamsTester {
-	
+
+
+	@Test //Flat Map test
+	public void test23() {
+		List<String> names1 = Arrays.asList("Dzmitry", "John");
+		List<String> names2 = Arrays.asList("David", "Laura");
+		Stream<List<String>> s = Stream.of(names1, names2);
+		s.flatMap(names -> names.stream()).forEach(System.out::println);
+	}
 	@Test
 	public void test22() {
 		IntStream.of(10).forEach(x->System.out.println(x));
@@ -37,7 +45,8 @@ public class StreamsTester {
 		List<Student> listStu = Arrays.asList(s1,s2,s3);
 		System.out.println(listStu.parallelStream().findAny());
 	}
-	
+
+	@Test
 	public void test2() {
 		Student s1 = new Student("Anurag");
 		Student s2 = new Student("Anupam");
