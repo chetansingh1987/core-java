@@ -4,6 +4,10 @@ import java.util.stream.IntStream;
 
 
 public class MTFibonacciTester {
+
+    public static void main(String[] args) {
+
+    }
     public static void main(String[] args) {
         int maxNumbers = 8;
         FibonacciPrinter printer = new FibonacciPrinter(maxNumbers);
