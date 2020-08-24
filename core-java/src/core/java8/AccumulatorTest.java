@@ -12,8 +12,10 @@ import java.util.stream.IntStream;
 import org.junit.Test;
 
 public class AccumulatorTest {
-	
-	
+
+	public static void main(String[] args) {
+
+	}
 	@Test
 	public void test1() {
 		int nT=1;

@@ -8,13 +8,8 @@ import static java.util.stream.Collectors.summingInt;
 import static java.util.stream.Collectors.toSet;
 import static org.junit.Assert.assertTrue;
 
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.IntSummaryStatistics;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -50,7 +45,7 @@ public class StreamsTester {
 	public void test2() {
 		Student s1 = new Student("Anurag");
 		Student s2 = new Student("Anupam");
-		Student s3 = new Student("Chetan");
+		Student s3 = new Student("Vineet");
 		
 		List<Student> listStu = Arrays.asList(s1,s2,s3);
 		listStu.stream().map(student->student.getName()).filter(name->name.startsWith("A")).collect(Collectors.toList()).forEach(System.out::println);
@@ -175,12 +170,38 @@ public class StreamsTester {
 	 * Stream optimiuzation is done so we dont iterate 100 numbers but only 
 	 * five because of intermdediate operationlimit
 	 */
-	
+
+
 	@Test
 	public void test14() {
 		IntStream.range(0, 100).peek(i->System.out.println("Peeked "+i)).limit(5).forEach(System.out::print);
 	}
 
+	@Test
+	public void test16(){
+		Employee e1 = new Employee();
+		e1.salary=100;
+		Employee e2 = new Employee();
+		e1.salary=200;
+		List<Employee> li = Arrays.asList(e1,e2);
+		Integer s = li.stream().map(e -> e.salary).collect(Collectors.toList()).get(1);
+		System.out.println(s);
+	}
+
+
+	@Test
+	public void test17(){
+		List<Integer> ordered = new ArrayList<>();
+		ordered.add(10);
+		ordered.add(9);
+		ordered.add(8);
+		ordered.add(7);
+		Collection<Integer> oset = ordered.stream().collect( Collectors.toCollection(LinkedHashSet::new) );
+		System.out.println(oset);
+	}
+}
+class Employee{
+	int salary;
 }
 
 enum  BlogPostType {NEWS,REVIEW,GUIDE}

@@ -13,7 +13,7 @@ import org.junit.Test;
 public class ReenterantTester {
 
 	public static void main(String[] args) {
-		new ReenterantTester().test2();
+		new ReenterantTester().test1();
 	}
 	
 	@Test
